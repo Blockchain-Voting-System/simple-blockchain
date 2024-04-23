@@ -29,7 +29,7 @@ class Node():
                 self.in_connections.append(conn)
                 print(f"Node connected: {bcolors.BLUE}{addr[0]}:{addr[1]}{bcolors.ENDC}")
                 
-                handle_connection = threading.Thread(target = self.handle_in_connection, args=(conn,))
+                handle_connection = threading.Thread(target = self.listen_for_messages, args=(conn,))
                 handle_connection.start()
 
             except Exception as e:
@@ -37,7 +37,7 @@ class Node():
                 self.sock.close()
                 break
             
-    def handle_in_connection(self, socket):
+    def listen_for_messages(self, socket):
         while True:
             try:
                 msg = socket.recv(4096)
@@ -54,6 +54,9 @@ class Node():
         s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         s.connect((host, port))
         self.out_connections.append(s)
+
+        handle_connection = threading.Thread(target = self.listen_for_messages, args=(s,))
+        handle_connection.start()
 
         print(f"Connected to node {bcolors.BLUE}{host}:{port}{bcolors.ENDC}.")
         
