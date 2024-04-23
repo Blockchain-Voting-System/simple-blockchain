@@ -1,18 +1,14 @@
 from typing import List
-import random, pickle, threading, socket, ecdsa
+import random, pickle, threading, socket
 from utils import bcolors
-
-PRIVATE_KEY = '0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef'
-
-signing_key = ecdsa.SigningKey.from_string(bytes.fromhex(PRIVATE_KEY), curve=ecdsa.SECP256k1)
-verifying_key = signing_key.get_verifying_key()
-public_key_hex = verifying_key.to_string().hex()
+from blockchain import Transaction
 
 class Node():
 
-    def __init__(self, host, port):
+    def __init__(self, host, port, private_key):
         self.host = host
         self.port = port
+        self.private_key = private_key
         self.id = random.randint(0, 10000000)
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.in_connections = []
@@ -58,6 +54,9 @@ class Node():
         self.out_connections.append(s)
 
         print(f"Connected to node {bcolors.BLUE}{host}:{port}{bcolors.ENDC}.")
+        
+    def sign_transaction(self, transaction: Transaction):
+        pass
         
     def send_to_all(self, data): 
         serialized = pickle.dumps(data)
