@@ -1,6 +1,7 @@
-from node import Node
-from utils import bcolors
+from p2p.node import Node
+from utils.utils import bcolors
 import random, threading
+from blockchain.auth import load_private_key_from_file
 
 HOST = "127.0.0.1"
 PORT = random.randint(49152, 65536)
@@ -17,15 +18,17 @@ if __name__ == "__main__":
     print(commands)
     
     running = True
+
+    private_key = load_private_key_from_file("key.pem")
     
-    node = Node(HOST, PORT)
+    node = Node(HOST, PORT, private_key)
 
     t = threading.Thread(target=node.run, daemon=False)
     t.start()
 
     while running:
         try:
-            inp = input(">")
+            inp = input("~ ")
             split = inp.split()
             
             if len(split)==0:

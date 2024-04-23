@@ -1,5 +1,5 @@
-import random, auth
-from blockchain import Transaction, Block, BlockChain
+import random, blockchain.auth as auth
+from blockchain.blockchain import Transaction, Block, BlockChain
 
 TRANSACTIONS_IN_BLOCK = 2
 LEADING_ZEROS = 1
@@ -21,7 +21,7 @@ def create_blockchain(n = 20):
 def create_blockchain_animation():
     block_chain = BlockChain(LEADING_ZEROS)
     while True:
-        m = input("> ")
+        m = input("~ ")
         if m == 'q':
             break
 

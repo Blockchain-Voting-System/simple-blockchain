@@ -1,6 +1,5 @@
 from typing import List
 import hashlib, datetime, sys, time, pickle
-import auth
 
 # sender, receiver - public wallet addresses
 

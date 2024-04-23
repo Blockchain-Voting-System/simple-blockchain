@@ -1,7 +1,9 @@
 from typing import List
 import random, pickle, threading, socket
-from utils import bcolors
-from blockchain import Transaction
+from utils.utils import bcolors
+from blockchain.blockchain import Transaction
+
+# TODO when in_connection comes, node cant send message to it
 
 class Node():
 
