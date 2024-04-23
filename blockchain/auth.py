@@ -3,7 +3,6 @@ from cryptography.hazmat.primitives import serialization
 from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.asymmetric import padding
 from cryptography.exceptions import InvalidSignature
-from blockchain.blockchain import Transaction
 from cryptography.hazmat.primitives.asymmetric.rsa import RSAPrivateKey, RSAPublicKey
 
 def load_private_key_from_file(file_path: str) -> RSAPrivateKey:
@@ -47,9 +46,6 @@ def str_from_signature(signature: bytes) -> str:
 
 def bytes_from_str_signature(str_signature: str) -> bytes:
     return bytes.fromhex(str_signature)
-
-def verify_transaction(transaction: Transaction) -> bool:
-    return verify(public_key_from_str(transaction.sender), bytes_from_str_signature(transaction.signature), transaction.get_bytes_without_signature())
 
 def verify(public_key: RSAPublicKey, signature: bytes, b: bytes) -> bool:
     try:

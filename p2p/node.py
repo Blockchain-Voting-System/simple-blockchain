@@ -15,7 +15,6 @@ class Node():
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.in_connections = []
         self.out_connections = []
-        self.valid_blockchain = None
 
     def run(self):
         self.sock.bind((self.host, self.port))
