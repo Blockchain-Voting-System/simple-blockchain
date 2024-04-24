@@ -1,4 +1,5 @@
 from cryptography.hazmat.primitives.asymmetric import rsa
+from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives import serialization
 from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.asymmetric import padding
@@ -6,11 +7,27 @@ from cryptography.exceptions import InvalidSignature
 from cryptography.hazmat.primitives.asymmetric.rsa import RSAPrivateKey, RSAPublicKey
 
 def load_private_key_from_file(file_path: str) -> RSAPrivateKey:
-    key_file = open(file_path, "rb")
-    private_key = serialization.load_pem_private_key(
-        key_file.read(),
-        password=None,
-    )
+    private_key = None
+    try:
+        key_file = open(file_path, "rb")
+        private_key = serialization.load_pem_private_key(
+            key_file.read(),
+            password=None,
+        )
+    except:
+        private_key = rsa.generate_private_key(
+            public_exponent=65537,
+            key_size=2048,
+            backend=default_backend()
+        )
+        key_file = open("key.pem", "w")
+        key_file.write(
+            private_key.private_bytes(
+                encoding=serialization.Encoding.PEM,
+                format=serialization.PrivateFormat.TraditionalOpenSSL,
+                encryption_algorithm=serialization.NoEncryption()
+            ).decode('utf-8')
+        )
     return private_key
 
 def load_private_key() -> RSAPrivateKey:

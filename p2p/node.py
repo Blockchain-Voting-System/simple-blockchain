@@ -1,9 +1,21 @@
 from typing import List
 import random, pickle, threading, socket
 from utils.utils import bcolors
-from blockchain.blockchain import Transaction
+from blockchain.blockchain import Transaction, BlockChain, Block
 
 # TODO when in_connection comes, node cant send message to it
+
+def create_blockchain(n = 3):
+    block_chain = BlockChain(2)
+    
+    for _ in range(n):
+        block = Block()
+        for _ in range(2):
+            block.add_transaction(Transaction(random.randint(0, 20), random.randint(0, 20), random.randint(1, 20000)))
+        block.mine(block_chain.leading_zeros)
+        block_chain.add_block(block)
+
+    return block_chain
 
 class Node():
 
@@ -15,6 +27,7 @@ class Node():
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.in_connections = []
         self.out_connections = []
+        self.blockchain = create_blockchain()
 
     def run(self):
         self.sock.bind((self.host, self.port))
@@ -40,7 +53,10 @@ class Node():
         while True:
             try:
                 msg = socket.recv(4096)
-                print(msg)
+                received_blockchain = pickle.loads(msg)
+                print(received_blockchain)
+                # TODO doesnt work, maybe generating hash in different terminal produces different output
+                print(f"verified: {received_blockchain.validate()}")
             except Exception as e:
                 print(f"{bcolors.BOLD}Node disconnected.{bcolors.ENDC}")
                 self.in_connections.remove(socket)
@@ -63,7 +79,7 @@ class Node():
         pass
         
     def send_to_all(self, data): 
-        serialized = pickle.dumps(data)
+        serialized = self.blockchain.serialize()
                
         for conn in self.out_connections:
             conn.sendall(serialized)

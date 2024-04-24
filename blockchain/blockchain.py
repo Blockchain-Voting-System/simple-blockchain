@@ -70,6 +70,9 @@ class BlockChain:
             if self.blocks[i].previous_hash != self.blocks[i-1].__hash__():
                 return False
         return True
+    
+    def serialize(self) -> bytes:
+        return pickle.dumps(self)
 
     def __str__(self) -> str:
         return "\n".join(f"{b}" for b in self.blocks)
