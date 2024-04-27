@@ -28,6 +28,7 @@ def load_private_key_from_file(file_path: str) -> RSAPrivateKey:
                 encryption_algorithm=serialization.NoEncryption()
             ).decode('utf-8')
         )
+    key_file.close()
     return private_key
 
 def load_private_key() -> RSAPrivateKey:
@@ -57,7 +58,7 @@ def sign(private_key: RSAPrivateKey, b: bytes) -> bytes:
         ),
         hashes.SHA256()
     )
-    
+
 def str_from_signature(signature: bytes) -> str:
     return signature.hex()
 
@@ -78,4 +79,3 @@ def verify(public_key: RSAPublicKey, signature: bytes, b: bytes) -> bool:
         return True
     except InvalidSignature as e:
         return False
-

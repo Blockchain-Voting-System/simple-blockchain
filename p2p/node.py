@@ -7,11 +7,11 @@ from blockchain.blockchain import Transaction, BlockChain, Block
 
 def create_blockchain(n = 3):
     block_chain = BlockChain(2)
-    
+
     for _ in range(n):
         block = Block()
         for _ in range(2):
-            block.add_transaction(Transaction(random.randint(0, 20), random.randint(0, 20), random.randint(1, 20000)))
+            block.add_transaction(Transaction(str(random.randint(0, 20)), str(random.randint(0, 20)), random.randint(1, 20000)))
         block.mine(block_chain.leading_zeros)
         block_chain.add_block(block)
 
@@ -34,13 +34,13 @@ class Node():
         self.sock.listen()
 
         print(f"{bcolors.GREEN}Node started on address: {self.host}:{self.port}{bcolors.ENDC}")
-        
+
         while True:
             try:
                 conn, addr = self.sock.accept()
                 self.in_connections.append(conn)
                 print(f"Node connected: {bcolors.BLUE}{addr[0]}:{addr[1]}{bcolors.ENDC}")
-                
+
                 handle_connection = threading.Thread(target = self.listen_for_messages, args=(conn,))
                 handle_connection.start()
 
@@ -48,7 +48,7 @@ class Node():
                 print(f"{bcolors.FAIL}Server stopped!{bcolors.ENDC}")
                 self.sock.close()
                 break
-            
+
     def listen_for_messages(self, socket):
         while True:
             try:
@@ -62,7 +62,7 @@ class Node():
                 self.in_connections.remove(socket)
                 socket.close()
                 break
-            
+
     def connect_to_node(self, host, port):
         print(f"Connecting to node {bcolors.BLUE}{host}:{port}{bcolors.ENDC} ...")
 
@@ -74,19 +74,19 @@ class Node():
         handle_connection.start()
 
         print(f"Connected to node {bcolors.BLUE}{host}:{port}{bcolors.ENDC}.")
-        
+
     def sign_transaction(self, transaction: Transaction):
         pass
-        
-    def send_to_all(self, data): 
+
+    def send_to_all(self, data):
         serialized = self.blockchain.serialize()
-               
+
         for conn in self.out_connections:
             conn.sendall(serialized)
-            
+
         for conn in self.in_connections:
             conn.sendall(serialized)
-        
+
     def shutdown(self):
         for sock in self.in_connections:
             sock.close()
