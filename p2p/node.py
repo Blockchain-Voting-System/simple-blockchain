@@ -10,6 +10,7 @@ def create_blockchain(n = 3):
 
     for _ in range(n):
         block = Block()
+        block.previous_hash = block_chain.blocks[-1].hash
         for _ in range(2):
             block.add_transaction(Transaction(str(random.randint(0, 20)), str(random.randint(0, 20)), random.randint(1, 20000)))
         block.mine(block_chain.leading_zeros)

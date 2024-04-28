@@ -1,4 +1,4 @@
-from blockchain.blockchain import Block, Transaction
+from blockchain.blockchain import Block, Transaction, BlockChain
 import random
 
 class bcolors:
@@ -12,13 +12,25 @@ class bcolors:
     BOLD = '\033[1m'
     UNDERLINE = '\033[4m'
 
-def create_block():
+def create_sample_transaction(sender):
+    transaction = Transaction(sender, "abcd123", 100)
+    transaction.timestamp = "long time ago"
+    return transaction
+
+def create_sample_block(prev_hash):
     block = Block()
+    block.previous_hash = prev_hash
     for _ in range(2):
-        t = Transaction("1", "2", 100)
-        t.timestamp = "123"
-        block.add_transaction(t)
-    block.mine(2)
-    block.time_to_mine = 1.0
-    block.nonce = 132
+        t = create_sample_transaction("sndr")
+        t.signature = "signature"
+        block.transactions.append(t)
     return block
+
+def create_sample_blockchain():
+    blockchain = BlockChain()
+    blockchain.leading_zeros = 1
+    for _ in range(3):
+        block = create_sample_block(blockchain.blocks[-1].hash)
+        block.mine(blockchain.leading_zeros)
+        blockchain.add_block(block)
+    return blockchain

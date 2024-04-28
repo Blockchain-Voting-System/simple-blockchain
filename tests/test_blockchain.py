@@ -1,6 +1,7 @@
 import sys, time, unittest, hashlib
 from blockchain.blockchain import BlockChain, Block, Transaction
 import blockchain.auth as auth
+from utils.utils import create_sample_block, create_sample_blockchain, create_sample_transaction
 
 class BlockchainTest(unittest.TestCase):
 
@@ -43,30 +44,6 @@ def load_key_pair():
     private_key = auth.load_private_key_from_file("./resources/test_private_key.pem")
     public_key = auth.get_public_key(private_key)
     return private_key, public_key
-
-def create_sample_transaction(sender):
-    transaction = Transaction(sender, "abcd123", 100)
-    transaction.timestamp = "long time ago"
-    return transaction
-
-def create_sample_block(prev_hash):
-    block = Block()
-    block.previous_hash = prev_hash
-    for _ in range(2):
-        t = create_sample_transaction("sndr")
-        t.signature = "signature"
-        block.transactions.append(t)
-    return block
-
-def create_sample_blockchain():
-    blockchain = BlockChain()
-    blockchain.leading_zeros = 1
-    for _ in range(3):
-        block = create_sample_block(blockchain.blocks[-1].hash)
-        block.mine(blockchain.leading_zeros)
-        blockchain.add_block(block)
-    return blockchain
-
 
 if __name__ == '__main__':
     unittest.main()
