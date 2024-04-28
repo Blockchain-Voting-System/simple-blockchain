@@ -11,6 +11,8 @@ To start the node run the command:
 python3 run_node.py
 ```
 
+Private key is loaded from `key.pem` file (if it exists - otherwise the program generates private keys and creates such a file itself).
+
 ## Tests
 
 To run tests run the following command in root project directory:
