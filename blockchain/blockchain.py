@@ -17,10 +17,7 @@ class Block:
         self.transactions.append(transaction)
 
     def serialize(self) -> bytes:
-        return pickle.dumps(self)
-
-    def calculate_hash(self) -> str:
-        serialized = pickle.dumps(
+        return pickle.dumps(
             {
                 "transactions": "".join(str(t) for t in self.transactions),
                 "previous_hash": self.previous_hash,
@@ -29,7 +26,9 @@ class Block:
                 "nonce": self.nonce
             }
         )
-        self.hash = hashlib.sha256(serialized).hexdigest()
+
+    def calculate_hash(self) -> str:
+        self.hash = hashlib.sha256(self.serialize()).hexdigest()
         return self.hash
 
     def mine(self, leading_zeros: int) -> None:
@@ -57,12 +56,17 @@ class Block:
 class BlockChain:
     def __init__(self, leading_zeros=2):
         self.leading_zeros = leading_zeros
+        self.no_transactions_in_block = 3
         self.blocks: List[Block] = [self.create_genesis()]
+        self.pending_transactions: List[Transaction] = []
 
     def create_genesis(self) -> Block:
         block = Block("")
         block.calculate_hash()
         return block
+
+    def add_transaction(self, transasction: Transaction) -> None:
+        self.pending_transactions.append(transasction)
 
     def add_block(self, block: Block) -> None:
         self.blocks.append(block)
