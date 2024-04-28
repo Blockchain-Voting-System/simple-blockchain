@@ -1,4 +1,4 @@
-import auth
+import blockchain.auth as auth
 import hashlib, pickle, datetime
 
 class Transaction():
@@ -7,7 +7,7 @@ class Transaction():
         self.receiver: str = receiver
         self.amount: int = amount
         self.timestamp: str = str(datetime.datetime.now())
-        self.signature: str = None
+        self.signature: str = ""
 
     def get_bytes_without_signature(self) -> bytes:
         return pickle.dumps(
@@ -29,9 +29,6 @@ class Transaction():
 
     def serialize(self) -> bytes:
         return pickle.dumps(self)
-
-    def __hash__(self) -> str:
-        return hashlib.sha256(self.serialize()).hexdigest()
 
     def __str__(self) -> str:
         return f'sender: {self.sender}, receiver: {self.receiver}, amount: {self.amount}, at: {self.timestamp}'

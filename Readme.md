@@ -5,8 +5,8 @@ Nodes use TCP protocol to exchange data about current state of the chain.
 
 ## Tests
 
-To run tests go to tests directory and run the following command:
+To run tests run the following command in root project directory:
 
 ```console
-python3 -m unittest discover -s .
+python3 -m unittest discover -s tests
 ```

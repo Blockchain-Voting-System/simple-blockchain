@@ -1,6 +1,6 @@
 from typing import List
 import hashlib, time, pickle
-from transaction import Transaction
+from blockchain.transaction import Transaction
 
 # sender, receiver - public wallet addresses
 

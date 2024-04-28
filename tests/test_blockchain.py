@@ -1,7 +1,6 @@
 import sys, time, unittest, hashlib
-sys.path.append("../blockchain")
-from blockchain import BlockChain, Block, Transaction
-import auth
+from blockchain.blockchain import BlockChain, Block, Transaction
+import blockchain.auth as auth
 
 class BlockchainTest(unittest.TestCase):
 
